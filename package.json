@@ -10,7 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^4.0.0",
+    "faker": "^4.1.0",
     "json2csv": "^3.11.5",
+    "lodash": "^4.17.4",
     "moment": "^2.20.1",
     "mysql": "^2.15.0"
   }

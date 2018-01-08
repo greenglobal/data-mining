@@ -1,6 +1,7 @@
 const json2csv = require('json2csv')
 const m = require('moment')
 const util = require('./util')
+const _ = require('lodash')
 
 const FORMAT_DATE = util.FORMAT_DATE
 
@@ -129,4 +130,10 @@ exports.parseDataTracking = () => {
     console.log(err)
   }
   console.log();
+}
+
+exports.getStaffs = () => {
+  const data = require(`${storage_path}/staffs_tracking_raw.json`)
+  const staff = _.uniq(_.map(data, 'staff'))
+  return staff
 }

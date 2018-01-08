@@ -1,15 +1,5 @@
 require('dotenv').config()
 
-const staff = require('./staff')
+const worktime = require('./worktime')
 
-/**
- * fetch from db
- */
-staff.exportPlanning()
-staff.exportTracking()
-
-/**
- * preprocessing
- */
-setTimeout(staff.parseDataPlanning, 5000)
-setTimeout(staff.parseDataTracking, 5000)
+worktime.exec()

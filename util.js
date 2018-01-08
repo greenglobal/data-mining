@@ -15,5 +15,7 @@ exports.connect = () => {
 
 exports.writeFile = (fileName, data) => {
   fs.writeFileSync(fileName, data)
-  console.log(`write to ${fileName} done`)
+  if (process.env.DEBUG) {
+    console.log(`write to ${fileName} done`)
+  }
 }
