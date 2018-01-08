@@ -6,7 +6,7 @@ const _ = require('lodash')
 const util = require('./util')
 const staff = require('./staff')
 const writeFile = util.writeFile
-const storage_path = './storage/raw'
+const storage_path = './storage'
 
 const internals = {}
 
@@ -16,7 +16,7 @@ internals.exportWorktime = (dayBegin, dayEnd) => {
   // writeFile(`${storage_path}/staffs_raw.json`, JSON.stringify(staffs))
   // writeFile(`${storage_path}/staffs_raw.csv`, json2csv({data: staffs.map(staff => {return {staff}}), fields: ['staff']}))
 
-  const staffs = require(`${storage_path}/staffs_raw.json`)
+  const staffs = require(`${storage_path}/raw/staffs_raw.json`)
 
   dayBegin = moment(dayBegin, util.FORMAT_DATE)
   dayEnd = moment(dayEnd, util.FORMAT_DATE)
@@ -38,8 +38,8 @@ internals.exportWorktime = (dayBegin, dayEnd) => {
     data: result,
     fields: columns
   })
-  writeFile(`${storage_path}/staffs_worktime_raw.csv`, csv)
-  writeFile(`${storage_path}/staffs_worktime_raw.json`, JSON.stringify(result))
+  writeFile(`${storage_path}/raw/staffs_worktime_raw.csv`, csv)
+  writeFile(`${storage_path}/raw/staffs_worktime_raw.json`, JSON.stringify(result))
 }
 
 /**
@@ -47,7 +47,7 @@ internals.exportWorktime = (dayBegin, dayEnd) => {
  */
 internals.preProcessing = () => {
   // We assume that raw data have no missing value
-  const data = require(`${storage_path}/staffs_worktime_raw.json`)
+  const data = require(`${storage_path}/raw/staffs_worktime_raw.json`)
   let group = _.groupBy(data, item => item.staff);
   const result = []
   for (const staff in group) {
@@ -62,8 +62,8 @@ internals.preProcessing = () => {
     data: result,
     fields: columns
   })
-  writeFile(`${storage_path}/staffs_worktime_parsed.csv`, csv)
-  writeFile(`${storage_path}/staffs_worktime_parsed.json`, JSON.stringify(result))
+  writeFile(`${storage_path}/parsed/staffs_worktime_parsed.csv`, csv)
+  writeFile(`${storage_path}/parsed/staffs_worktime_parsed.json`, JSON.stringify(result))
 }
 
 exports.exec = () => {
