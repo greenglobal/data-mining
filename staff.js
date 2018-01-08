@@ -8,8 +8,9 @@ const FORMAT_DATE = util.FORMAT_DATE
 const connect = util.connect
 const writeFile = util.writeFile
 const storage_path = './storage'
+const internals = {}
 
-exports.exportPlanning = () => {
+internals.exportPlanning = () => {
   const query = `
     select u.name staff, t.name project, e.started_on,  e.ended_on
     from estimates e, users u, tracking_codes t
@@ -32,18 +33,16 @@ exports.exportPlanning = () => {
         data: results,
         fields: columns
       })
-      writeFile(`${storage_path}/staffs_planning_raw.csv`, csv)
-      writeFile(`${storage_path}/staffs_planning_raw.json`, JSON.stringify(results))
-      console.log('Export Planning Staff done', results.length)
+      writeFile(`${storage_path}/raw/staffs_planning_raw.csv`, csv)
+      writeFile(`${storage_path}/raw/staffs_planning_raw.json`, JSON.stringify(results))
     } catch (err) {
       console.log(err)
     }
     connection.destroy()
-    console.log();
   })
 }
 
-exports.exportTracking = () => {
+internals.exportTracking = () => {
   const query = `
     select u.name staff, t.name project, e.day, e.start_time,  e.end_time
     from project_tracking e, users u, tracking_codes t
@@ -69,9 +68,8 @@ exports.exportTracking = () => {
         data: results,
         fields: columns
       })
-      writeFile(`${storage_path}/staffs_tracking_raw.csv`, csv)
-      writeFile(`${storage_path}/staffs_tracking_raw.json`, JSON.stringify(results))
-      console.log('Export Tracking Staff done', results.length)
+      writeFile(`${storage_path}/raw/staffs_tracking_raw.csv`, csv)
+      writeFile(`${storage_path}/raw/staffs_tracking_raw.json`, JSON.stringify(results))
     } catch (err) {
       console.log(err)
     }
@@ -80,8 +78,8 @@ exports.exportTracking = () => {
   })
 }
 
-exports.parseDataPlanning = () => {
-  const data = require(`${storage_path}/staffs_planning_raw.json`)
+internals.parseDataPlanning = () => {
+  const data = require(`${storage_path}/raw/staffs_planning_raw.json`)
   let results = []
   data.forEach(row => {
     const result = []
@@ -100,17 +98,15 @@ exports.parseDataPlanning = () => {
       data: results,
       fields: columns
     })
-    writeFile(`${storage_path}/staffs_planning_parsed.csv`, csv)
-    writeFile(`${storage_path}/staffs_planning_parsed.json`, JSON.stringify(results))
-    console.log('Export Planning Staff done', results.length)
+    writeFile(`${storage_path}/parsed/staffs_planning_parsed.csv`, csv)
+    writeFile(`${storage_path}/parsed/staffs_planning_parsed.json`, JSON.stringify(results))
   } catch (err) {
     console.log(err)
   }
-  console.log();
 }
 
-exports.parseDataTracking = () => {
-  const data = require(`${storage_path}/staffs_tracking_raw.json`)
+internals.parseDataTracking = () => {
+  const data = require(`${storage_path}/raw/staffs_tracking_raw.json`)
   let results = data.map(row => {
     row.day = m(row.day).format(FORMAT_DATE)
     row.count_hour = row.end_time - row.start_time
@@ -123,17 +119,35 @@ exports.parseDataTracking = () => {
       data: results,
       fields: columns
     })
-    writeFile(`${storage_path}/staffs_tracking_parsed.csv`, csv)
-    writeFile(`${storage_path}/staffs_tracking_parsed.json`, JSON.stringify(results))
-    console.log('Export Tracking Staff done', results.length)
+    writeFile(`${storage_path}/parsed/staffs_tracking_parsed.csv`, csv)
+    writeFile(`${storage_path}/parsed/staffs_tracking_parsed.json`, JSON.stringify(results))
   } catch (err) {
     console.log(err)
   }
-  console.log();
 }
 
 exports.getStaffs = () => {
-  const data = require(`${storage_path}/staffs_tracking_raw.json`)
+  const data = require(`${storage_path}/raw/staffs_tracking_raw.json`)
   const staff = _.uniq(_.map(data, 'staff'))
   return staff
+}
+
+exports.exec = () => {
+  // We had raw data, don't need export any more
+  // console.log('\nExport Planning Staff done')
+  // internals.exportPlanning()
+  // console.log('Export Planning Staff done\n')
+  // console.log('\nExport Tracking Staff')
+  // internals.exportTracking()
+  // console.log('Export Tracking Staff done\n')
+  // setTimeout(internals.parseDataPlanning, 5000)
+  // setTimeout(internals.parseDataTracking, 10000)
+
+  console.log('\nParse Planning Staff')
+  internals.parseDataPlanning()
+  console.log('Parse Planning Staff done\n')
+
+  console.log('\nParse Tracking Staff')
+  internals.parseDataPlanning()
+  console.log('Parse Tracking Staff done\n')
 }

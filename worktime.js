@@ -70,9 +70,10 @@ exports.exec = () => {
   const startDay = '2017/06/01';
   const endDay = '2017/6/15';
 
-  console.log('\nExport working time raw data')
-  internals.exportWorktime(startDay, endDay)
-  console.log('Export working time raw data done\n')
+  // We had raw data, don't need export any more
+  // console.log('\nExport working time raw data')
+  // internals.exportWorktime(startDay, endDay)
+  // console.log('Export working time raw data done\n')
 
   console.log('\nParse working time raw data')
   internals.preProcessing(startDay, endDay)
