@@ -28,8 +28,9 @@ internals.group = () => {
     const late_rate = 100 * worktime[staff].count_late_hour / worktime[staff].worktime
     const distract_rate = 100 * distraction[staff].count_distract_hour / worktime[staff].worktime
     const estimate_rate = 100 * (estimation[staff].count_estimate_hour - estimation[staff].count_worklog_hour) / estimation[staff].count_estimate_hour
+    const bug_rate = 100 * (bug[staff].count_bug) / estimation[staff].count_worklog_hour
     const observation = {
-      late_rate, distract_rate, estimate_rate
+      late_rate, distract_rate, estimate_rate, bug_rate
     }
     label = internals.evalution(observation)
     return _.merge({}, worktime[staff], estimation[staff], distraction[staff], bug[staff], observation, label)
@@ -46,6 +47,7 @@ internals.group = () => {
     'late_rate',
     'distract_rate',
     'estimate_rate',
+    'bug_rate',
   ].concat(Object.keys(label))
   try {
     const csv = json2csv({
@@ -71,6 +73,7 @@ internals.evalution = (observation) => {
     observation.late_rate < 1
     && observation.distract_rate < 0.3
     && observation.estimate_rate > -1
+    && observation.bug_rate < 2.5
 
   // we can evalute more here
   return {
