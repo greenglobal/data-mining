@@ -22,9 +22,13 @@ internals.exportWorktime = (dayBegin, dayEnd) => {
   dayEnd = moment(dayEnd, util.FORMAT_DATE)
   let result = []
   for (let i = dayBegin; i <= dayEnd; i = i.add(1, 'days')) {
+    // ignore for weekend
+    if (util.isWeekend(i)) {
+      continue
+    }
     const trackingDay = []
     staffs.forEach(staff => {
-      const rate = 100 - (Math.random() * 15)
+      const rate = 100 - (Math.random() * 10)
       trackingDay.push({
         staff,
         day: i.format(util.FORMAT_DATE),
@@ -51,13 +55,16 @@ internals.preProcessing = () => {
   let group = _.groupBy(data, item => item.staff);
   const result = []
   for (const staff in group) {
-    const sumRate = _.sumBy(group[staff], item => { return 1 - item.rate});
+    const vacation = [5, 8, 10][Math.round(Math.random()*2)]
+    const sumRate = _.sumBy(group[staff], item => { return 1 - item.rate})
+    const sumWork = group[staff].length - vacation
     result.push({
       staff,
+      worktime: sumWork * 8,
       count_late_hour: parseFloat(sumRate.toFixed(2)) * 8
     })
   }
-  const columns = ['staff', 'count_late_hour']
+  const columns = ['staff', 'worktime', 'count_late_hour']
   const csv = json2csv({
     data: result,
     fields: columns
@@ -66,9 +73,7 @@ internals.preProcessing = () => {
   writeFile(`${storage_path}/parsed/staffs_worktime_parsed.json`, JSON.stringify(result))
 }
 
-exports.exec = () => {
-  const startDay = '2017/06/01';
-  const endDay = '2017/6/15';
+exports.exec = (startDay, endDay) => {
 
   // We had raw data, don't need export any more
   // console.log('\nExport working time raw data')
@@ -76,6 +81,6 @@ exports.exec = () => {
   // console.log('Export working time raw data done\n')
 
   console.log('\nParse working time raw data')
-  internals.preProcessing(startDay, endDay)
+  internals.preProcessing()
   console.log('Parse working time raw data done\n')
 }

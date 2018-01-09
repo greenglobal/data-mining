@@ -19,3 +19,8 @@ exports.writeFile = (fileName, data) => {
     console.log(`write to ${fileName} done`)
   }
 }
+
+exports.isWeekend = (date) => {
+  const d = new Date(date)
+  return d.getDay() === 6 || d.getDay() === 0
+}

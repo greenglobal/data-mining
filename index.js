@@ -1,22 +1,21 @@
 require('dotenv').config()
 
-const staff = require('./staff')
 const worktime = require('./worktime')
 const estimation = require('./estimation')
 const bug = require('./bug')
 const distraction = require('./distraction')
 
-// preprocess planning/tracking time
-staff.exec()
+const startDay = '2016/07/01';
+const endDay = '2016/12/31';
 
 // preprocess working time
-worktime.exec()
+worktime.exec(startDay, endDay)
 
 // preprocess estimation/reality worklog
-estimation.exec()
+estimation.exec(startDay, endDay)
 
 // preprocess bug data
-bug.exec()
+bug.exec(startDay, endDay)
 
 // preprocess distraction data
-distraction.exec()
+distraction.exec(startDay, endDay)

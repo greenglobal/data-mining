@@ -21,6 +21,10 @@ internals.exportEstimation = (dayBegin, dayEnd) => {
     return Math.round(Math.random() * 6 + 1) + Math.round(Math.random())*0.5
   }
   for (let i = dayBegin; i <= dayEnd; i = i.add(1, 'days')) {
+    // ignore for weekend
+    if (util.isWeekend(i)) {
+      continue
+    }
     const task = []
     staffs.forEach(staff => {
       task.push({
@@ -68,10 +72,7 @@ internals.preProcessing = () => {
   writeFile(`${storage_path}/parsed/staffs_estimation_parsed.json`, JSON.stringify(result))
 }
 
-exports.exec = () => {
-  // const startDay = '2017/06/01';
-  // const endDay = '2017/6/15';
-
+exports.exec = (startDay, endDay) => {
   // console.log('\nExport estimation raw data')
   // internals.exportEstimation(startDay, endDay)
   // console.log('Export estimation raw data done\n')

@@ -18,6 +18,10 @@ internals.exportDistraction = (dayBegin, dayEnd) => {
   dayEnd = moment(dayEnd, util.FORMAT_DATE)
   let result = []
   for (let i = dayBegin; i <= dayEnd; i = i.add(1, 'days')) {
+    // ignore for weekend
+    if (util.isWeekend(i)) {
+      continue
+    }
     const task = []
     staffs.forEach(staff => {
       task.push({
@@ -61,10 +65,7 @@ internals.preProcessing = () => {
   writeFile(`${storage_path}/parsed/staffs_distraction_parsed.json`, JSON.stringify(result))
 }
 
-exports.exec = () => {
-  // const startDay = '2017/06/01';
-  // const endDay = '2017/6/15';
-
+exports.exec = (startDay, endDay) => {
   // console.log('\nExport distraction raw data')
   // internals.exportDistraction(startDay, endDay)
   // console.log('Export distraction raw data done\n')

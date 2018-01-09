@@ -12,6 +12,8 @@ cp .env.example .env
 
 ## Extract data
 
+Extracted data in storage/parsed folder
+
 ```
 docker-compose run --rm app node index
 ```

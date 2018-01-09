@@ -37,9 +37,7 @@ internals.preProcessing = () => {
   writeFile(`${storage_path}/parsed/staffs_bug_parsed.json`, JSON.stringify(result))
 }
 
-exports.exec = () => {
-  const startDay = '2017/06/01';
-  const endDay = '2017/6/15';
+exports.exec = (startDay, endDay) => {
 
   // We had raw data, don't need export any more
   // console.log('\nExport bug raw data')
@@ -47,6 +45,6 @@ exports.exec = () => {
   // console.log('Export bug raw data done\n')
 
   console.log('\nParse bug raw data')
-  internals.preProcessing(startDay, endDay)
+  internals.preProcessing()
   console.log('Parse bug raw data done\n')
 }
