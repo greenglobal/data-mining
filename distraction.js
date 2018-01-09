@@ -27,12 +27,12 @@ internals.exportDistraction = (dayBegin, dayEnd) => {
       task.push({
         staff,
         site: ['facebook', 'youtube'][Math.round(Math.random())],
-        count_hour: [0, 0, parseFloat((Math.random()/4).toFixed(2))][Math.round(Math.random() * 2)],
+        count_distract_hour: [0, 0, parseFloat((Math.random()/4).toFixed(2))][Math.round(Math.random() * 2)],
       })
     })
     result = result.concat(task)
   }
-  const columns = ['staff', 'site', 'count_hour']
+  const columns = ['staff', 'site', 'count_distract_hour']
   const csv = json2csv({
     data: result,
     fields: columns
@@ -50,13 +50,13 @@ internals.preProcessing = () => {
   let group = _.groupBy(data, item => item.staff);
   const result = []
   for (const staff in group) {
-    const sum = parseFloat(_.sumBy(group[staff], 'count_hour').toFixed(2))
+    const sum = parseFloat(_.sumBy(group[staff], 'count_distract_hour').toFixed(2))
     result.push({
       staff,
-      count_hour: sum,
+      count_distract_hour: sum,
     })
   }
-  const columns = ['staff', 'count_hour']
+  const columns = ['staff', 'count_distract_hour']
   const csv = json2csv({
     data: result,
     fields: columns
