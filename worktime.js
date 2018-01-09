@@ -20,8 +20,11 @@ internals.exportWorktime = (dayBegin, dayEnd) => {
 
   dayBegin = moment(dayBegin, util.FORMAT_DATE)
   dayEnd = moment(dayEnd, util.FORMAT_DATE)
+  const progress = util.progress('Export worktime raw', { total: dayEnd.diff(dayBegin, 'day')})
+
   let result = []
   for (let i = dayBegin; i <= dayEnd; i = i.add(1, 'days')) {
+    progress.tick()
     // ignore for weekend
     if (util.isWeekend(i)) {
       continue
@@ -53,8 +56,11 @@ internals.preProcessing = () => {
   // We assume that raw data have no missing value
   const data = require(`${storage_path}/raw/staffs_worktime_raw.json`)
   let group = _.groupBy(data, item => item.staff);
+  const progress = util.progress('Processing worktime', { total: Object.keys(group).length })
+
   const result = []
   for (const staff in group) {
+    progress.tick();
     const vacation = [5, 8, 10][Math.round(Math.random()*2)]
     const sumRate = _.sumBy(group[staff], item => { return 1 - (item.rate > 0.9 ? 1 : item.rate)})
     const sumWork = group[staff].length - vacation
@@ -74,13 +80,9 @@ internals.preProcessing = () => {
 }
 
 exports.exec = (startDay, endDay) => {
-
-  // We had raw data, don't need export any more
-  // console.log('\nExport working time raw data')
-  // internals.exportWorktime(startDay, endDay)
-  // console.log('Export working time raw data done\n')
-
-  console.log('\nParse working time raw data')
+    // We had raw data, don't need export any more
+  if (process.env.RE_EXPORT && process.env.RE_EXPORT !== 'false' && process.env.RE_EXPORT !== '0') {
+    internals.exportWorktime(startDay, endDay)
+  }
   internals.preProcessing()
-  console.log('Parse working time raw data done\n')
 }

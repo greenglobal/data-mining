@@ -16,8 +16,11 @@ internals.exportDistraction = (dayBegin, dayEnd) => {
 
   dayBegin = moment(dayBegin, util.FORMAT_DATE)
   dayEnd = moment(dayEnd, util.FORMAT_DATE)
+  const progress = util.progress('\nExport distraction raw', { total: dayEnd.diff(dayBegin, 'day')})
+
   let result = []
   for (let i = dayBegin; i <= dayEnd; i = i.add(1, 'days')) {
+    progress.tick()
     // ignore for weekend
     if (util.isWeekend(i)) {
       continue
@@ -48,8 +51,11 @@ internals.preProcessing = () => {
   // We assume that raw data have no missing value
   const data = require(`${storage_path}/raw/staffs_distraction_raw.json`)
   let group = _.groupBy(data, item => item.staff);
+  const progress = util.progress('Processing distraction', { total: Object.keys(group).length})
+
   const result = []
   for (const staff in group) {
+    progress.tick()
     const sum = parseFloat(_.sumBy(group[staff], 'count_distract_hour').toFixed(2))
     result.push({
       staff,
@@ -66,11 +72,9 @@ internals.preProcessing = () => {
 }
 
 exports.exec = (startDay, endDay) => {
-  // console.log('\nExport distraction raw data')
-  // internals.exportDistraction(startDay, endDay)
-  // console.log('Export distraction raw data done\n')
+  if (process.env.RE_EXPORT && process.env.RE_EXPORT !== 'false' && process.env.RE_EXPORT !== '0') {
+    internals.exportDistraction(startDay, endDay)
+  }
 
-  console.log('\nParse distraction raw data')
   internals.preProcessing()
-  console.log('Parse distraction raw data done\n')
 }

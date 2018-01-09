@@ -20,8 +20,11 @@ internals.group = () => {
   distraction = _.zipObject(distraction.map(i => i.staff), distraction);
   bug = _.zipObject(bug.map(i => i.staff), bug);
 
+  const progress = util.progress('\nEvalute promotion', { total: staffs.length })
+
   let label
   const group = staffs.map(staff => {
+    progress.tick()
     const late_rate = 100 * worktime[staff].count_late_hour / worktime[staff].worktime
     const distract_rate = 100 * distraction[staff].count_distract_hour / worktime[staff].worktime
     const estimate_rate = 100 * (estimation[staff].count_estimate_hour - estimation[staff].count_worklog_hour) / estimation[staff].count_estimate_hour
@@ -76,7 +79,5 @@ internals.evalution = (observation) => {
 }
 
 exports.exec = () => {
-  console.log('\nProcess preparation data')
   internals.group()
-  console.log('Process preparation data done\n')
 }

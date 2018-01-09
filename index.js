@@ -9,7 +9,7 @@ const promote = require('./promote')
 const startDay = '2016/07/01';
 const endDay = '2016/12/31';
 
-// preprocess working time
+// // preprocess working time
 // worktime.exec(startDay, endDay)
 
 // // preprocess estimation/reality worklog
@@ -22,3 +22,4 @@ const endDay = '2016/12/31';
 // distraction.exec(startDay, endDay)
 
 promote.exec()
+console.info('Complete processing')

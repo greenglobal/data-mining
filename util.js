@@ -1,5 +1,6 @@
 const mysql = require('mysql')
 const fs = require('fs')
+const ProgressBar = require('progress')
 
 exports.FORMAT_DATE = 'YYYY-MM-DD'
 
@@ -15,7 +16,7 @@ exports.connect = () => {
 
 exports.writeFile = (fileName, data) => {
   fs.writeFileSync(fileName, data)
-  if (process.env.DEBUG) {
+  if (process.env.DEBUG && process.env.DEBUG !== 'false' && process.env.DEBUG !== '0') {
     console.log(`write to ${fileName} done`)
   }
 }
@@ -23,4 +24,8 @@ exports.writeFile = (fileName, data) => {
 exports.isWeekend = (date) => {
   const d = new Date(date)
   return d.getDay() === 6 || d.getDay() === 0
+}
+
+exports.progress = (task, options) => {
+  return new ProgressBar(`${task} [:bar] :percent`, options)
 }

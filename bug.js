@@ -19,8 +19,11 @@ internals.exportBug = (dayBegin, dayEnd) => {
 internals.preProcessing = () => {
   // We assume that raw data have no missing value
   const data = require(`${storage_path}/raw/staffs_raw.json`)
+  const progress = util.progress('\nProcessing bug data', { total: data.length})
+
   const result = []
   for (const staff of data) {
+    progress.tick()
     const sum = Math.round(Math.random() * 30)
     result.push({
       staff,
@@ -40,11 +43,9 @@ internals.preProcessing = () => {
 exports.exec = (startDay, endDay) => {
 
   // We had raw data, don't need export any more
-  // console.log('\nExport bug raw data')
-  // internals.exportBug(startDay, endDay)
-  // console.log('Export bug raw data done\n')
+  if (process.env.RE_EXPORT && process.env.RE_EXPORT !== 'false' && process.env.RE_EXPORT !== '0') {
+    internals.exportBug(startDay, endDay)
+  }
 
-  console.log('\nParse bug raw data')
   internals.preProcessing()
-  console.log('Parse bug raw data done\n')
 }
