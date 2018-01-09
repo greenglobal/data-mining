@@ -21,7 +21,7 @@ internals.preProcessing = () => {
   const data = require(`${storage_path}/raw/staffs_raw.json`)
   const result = []
   for (const staff of data) {
-    const sum = Math.round(Math.random() * 120)
+    const sum = Math.round(Math.random() * 30)
     result.push({
       staff,
       count_bug: sum

@@ -27,7 +27,7 @@ internals.exportDistraction = (dayBegin, dayEnd) => {
       task.push({
         staff,
         site: ['facebook', 'youtube'][Math.round(Math.random())],
-        count_hour: [0, parseFloat(Math.random().toFixed(2))][Math.round(Math.random())],
+        count_hour: [0, 0, parseFloat((Math.random()/4).toFixed(2))][Math.round(Math.random() * 2)],
       })
     })
     result = result.concat(task)

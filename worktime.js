@@ -28,11 +28,11 @@ internals.exportWorktime = (dayBegin, dayEnd) => {
     }
     const trackingDay = []
     staffs.forEach(staff => {
-      const rate = 100 - (Math.random() * 10)
+      const rate = (100 - Math.round(Math.random() * 12))/100
       trackingDay.push({
         staff,
         day: i.format(util.FORMAT_DATE),
-        rate: parseFloat(((rate < 95 ? rate: 100)/100).toFixed(2))
+        rate: [1, 1, rate][Math.round(Math.random() * 2)],
       })
     })
     result = result.concat(trackingDay)
@@ -56,7 +56,7 @@ internals.preProcessing = () => {
   const result = []
   for (const staff in group) {
     const vacation = [5, 8, 10][Math.round(Math.random()*2)]
-    const sumRate = _.sumBy(group[staff], item => { return 1 - item.rate})
+    const sumRate = _.sumBy(group[staff], item => { return 1 - (item.rate > 0.9 ? 1 : item.rate)})
     const sumWork = group[staff].length - vacation
     result.push({
       staff,
