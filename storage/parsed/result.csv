@@ -1,0 +1,3 @@
+"staff","worktime","count_late_hour","count_estimate_hour","count_worklog_hour","count_distract_hour","count_bug","late_rate","distract_rate","estimate_rate","bug_rate","promote"
+"Phu Tran",984,7.76,543.5,544.5,2.82,3,0.7886178861788617,0.2865853658536585,-0.18399264029438822,0.5509641873278237,true
+"Tinh Le Van",1008,6,564,557,2.85,13,0.5952380952380952,0.28273809523809523,1.2411347517730495,2.3339317773788153,true

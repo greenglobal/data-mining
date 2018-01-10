@@ -20,7 +20,7 @@ internals.group = () => {
   distraction = _.zipObject(distraction.map(i => i.staff), distraction);
   bug = _.zipObject(bug.map(i => i.staff), bug);
 
-  const progress = util.progress('\nEvalute promotion', { total: staffs.length })
+  const progress = util.progress('\nEvalute promotion', { total: staffs.length + 2 })
 
   let label
   const group = staffs.map(staff => {
@@ -56,6 +56,12 @@ internals.group = () => {
     })
     writeFile(`${storage_path}/parsed/staffs_promote.csv`, csv)
     writeFile(`${storage_path}/parsed/staffs_promote.json`, JSON.stringify(group))
+    progress.tick()
+
+    const result = group.filter(staff => staff.promote)
+    writeFile(`${storage_path}/parsed/result.csv`, json2csv({ data: result, fields: columns }))
+    writeFile(`${storage_path}/parsed/result.json`, JSON.stringify(result))
+    progress.tick()
   } catch (err) {
     console.log(err)
   }
